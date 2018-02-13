@@ -177,6 +177,22 @@
                         <flush-strategy>IdleConnections</flush-strategy>
                     </pool>
                 </datasource>
+                <datasource jndi-name="java:jboss/datasources/${env.OPENSHIFT_SQL_SERVER_DATASOURCE}" pool-name="${env.OPENSHIFT_SQL_SERVER_DATASOURCE}" enabled="false" use-java-context="true" use-ccm="true">
+                    <connection-url>jdbc:mysql://${env.OPENSHIFT_SQL_SERVER_DB_HOST}:${env.OPENSHIFT_SQL_SERVER_DB_PORT}/${env.OPENSHIFT_SQL_SERVER_DB_NAME}</connection-url>
+                    <driver>sqlserver</driver>
+                    <pool>
+                        <flush-strategy>IdleConnections</flush-strategy>
+                    </pool>
+                    <security>
+                        <user-name>${env.OPENSHIFT_SQL_SERVER_DB_USERNAME}</user-name>
+                        <password>${env.OPENSHIFT_SQL_SERVER_DB_PASSWORD}</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <background-validation>true</background-validation>
+                        <background-validation-millis>60000</background-validation-millis>
+                    </validation>
+                </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -186,6 +202,9 @@
                     </driver>
                     <driver name="postgresql" module="org.postgresql.jdbc">
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+                    </driver>
+                    <driver name="sqlserver" module="com.microsoft.sqlserver">
+                        <xa-datasource-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
